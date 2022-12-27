@@ -16,3 +16,38 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.about-circle {
+    margin: 2rem auto;
+    background-color: lightgray;
+    width:10rem;
+    height: 10rem;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center
+}
+
+.fa-book{
+    color:dimgrey
+}
+
+.user-icon {
+    width:2rem;
+    height: 2rem;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background-color: lightgray;
+    margin: 0.5rem;
+}
+.user-icon > i {
+    color:dimgrey
+}
+.table-head {
+    border-bottom: 1px solid black
+}
+.table-row:hover{
+    cursor:pointer
+}

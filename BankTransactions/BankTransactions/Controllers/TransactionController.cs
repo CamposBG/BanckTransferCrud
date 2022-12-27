@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BankTransactions.Models;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Primitives;
+using System.Globalization;
 
 namespace BankTransactions.Controllers
 {
@@ -22,9 +25,9 @@ namespace BankTransactions.Controllers
         // GET: Transaction
         public async Task<IActionResult> Index()
         {
+             
               return View(await _context.Transactions.ToListAsync());
         }
-
 
         // GET: Transaction/AddOrEdit
         public IActionResult AddOrEdit(int id = 0)
