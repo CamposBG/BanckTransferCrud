@@ -7,6 +7,14 @@
 <div>
     <div class="col-md-8 w-100">
         <h1>Transações</h1>
+        <div class="filter d-flex align-items-center gap-2 w-auto d-felx justify-content-end">
+            <label for="filter-input">Pesquisar</label>
+            <input type="text" id="filter-input" placeholder="Nome do beneficiário" />
+            <button class="btn btn-secondary btn-sm" id="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+
+        </div>
   
   
 
@@ -23,7 +31,7 @@
                         @Html.DisplayNameFor(model => model.Date)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Amount)
+                         @Html.DisplayNameFor(model => model.Amount)
                     </th>
                     <th style="width:80px">
                         <a asp-action="AddOrEdit" class="btn btn-sm btn-success">
@@ -32,7 +40,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="table-content">
                 @foreach (var item in Model)
                 {
                     <tr class="table-row" id="@item.TransactionId">
@@ -46,7 +54,7 @@
                             @Html.DisplayFor(modelItem => item.Date)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Amount)
+                            R$ @Html.DisplayFor(modelItem => item.Amount),00
                         </td>
                         <td>
                             <form asp-action="Delete" asp-route-id="@item.TransactionId">
@@ -65,3 +73,7 @@
         </table>
     </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/Transaction/index.js"></script>
+}

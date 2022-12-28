@@ -9,33 +9,46 @@ using BankTransactions.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Primitives;
 using System.Globalization;
+using BankTransactions.Services;
 
 namespace BankTransactions.Controllers
 {
     public class TransactionController : Controller
     {
-        private readonly TransactionDbContext _context;
+        private readonly TransactionDbContext _context; //remover context da controller 
+
+        private readonly TransactionService _transactionService;
 
         // TransactionDbContext is passed as parameter through dependency injection
-        public TransactionController(TransactionDbContext context)
+        public TransactionController(TransactionDbContext context,TransactionService transactionService)
         {
             _context = context;
+            _transactionService = transactionService;
         }
 
         // GET: Transaction
         public async Task<IActionResult> Index()
         {
-             
-              return View(await _context.Transactions.ToListAsync());
+              List<Transaction> transaction = await _transactionService.GetTransactions();
+              return View(transaction);
+        }
+
+
+        // GET: Transaction/Filter
+        public  IActionResult Filter()
+        {
+            var name = Request.Query["name"].ToString();
+            var transactions = _transactionService.getTransactionsByName(name);
+            return Json(new { transactions });
         }
 
         // GET: Transaction/AddOrEdit
         public IActionResult AddOrEdit(int id = 0)
         {
             if(id == 0)
-                return View(new Transaction());
+                return View(_transactionService.createTransaction());
             else
-                return View(_context.Transactions.Find(id));
+                return View(_transactionService.getTransactionByID(id));
 
         }
 
@@ -48,28 +61,20 @@ namespace BankTransactions.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(transaction.TransactionId== 0) {
-                    transaction.Date = DateTime.Now;
-                    _context.Add(transaction);
-                }
-                else
+                var response = await _transactionService.createOrUpdateTransaction(transaction);
+                if (response == "update")
                 {
-                    _context.Update(transaction);
+                     return  RedirectToAction(nameof(Index));
                 }
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            return View(transaction);
+            return RedirectToAction("Index");
         }
 
         // POST: Transaction/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var transaction = await _context.Transactions.FindAsync(id);
-            _context.Transactions.Remove(transaction);
-            await _context.SaveChangesAsync();
+            var response = await _transactionService.deleteTransaction(id); 
             return RedirectToAction(nameof(Index));
         }
 
