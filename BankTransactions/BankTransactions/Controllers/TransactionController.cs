@@ -15,14 +15,11 @@ namespace BankTransactions.Controllers
 {
     public class TransactionController : Controller
     {
-        private readonly TransactionDbContext _context; //remover context da controller 
-
         private readonly TransactionService _transactionService;
 
         // TransactionDbContext is passed as parameter through dependency injection
         public TransactionController(TransactionDbContext context,TransactionService transactionService)
         {
-            _context = context;
             _transactionService = transactionService;
         }
 
@@ -76,11 +73,6 @@ namespace BankTransactions.Controllers
         {
             var response = await _transactionService.deleteTransaction(id); 
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool TransactionExists(int id)
-        {
-          return _context.Transactions.Any(e => e.TransactionId == id);
         }
     }
 }
